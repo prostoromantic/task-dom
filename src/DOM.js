@@ -5,6 +5,12 @@
   Считаем, что всегда передается тег, допускающий вставку текста в качестве своего содержимого (P, DIV, I и пр.).
 */
 export function appendToBody(tag, content, count) {
+    const body = document.body;
+    for (let i = 0; i < count; i++) {
+        const elem = document.createElement(tag);
+        elem.innerHTML = content;
+        body.append(elem);
+    }
 }
 
 /*
@@ -15,6 +21,31 @@ export function appendToBody(tag, content, count) {
   Сформированное дерево верните в качестве результата работы функции.
 */
 export function generateTree(childrenCount, level) {
+    let html = document.createElement('div');
+    html.className = 'item_1';
+    for (let i = 1; i < level; i++) {
+        if (i != 1) {
+            var elements = html.querySelectorAll('.item_' + String(i));
+        } else {
+            var elements = [1];
+        }
+        for (let k = 0; k < elements.length; k++) {
+            for (let j = 0; j < childrenCount; j++) {
+                if (i != 1) {
+                    let div = document.createElement('div');
+                    div.className = 'item_' + String(i + 1);
+                    html.querySelectorAll('.item_' + String(i))[k].appendChild(
+                        div,
+                    );
+                } else {
+                    let div = document.createElement('div');
+                    div.className = 'item_' + String(i + 1);
+                    html.appendChild(div);
+                }
+            }
+        }
+    }
+    return html;
 }
 
 /*
@@ -26,4 +57,12 @@ export function generateTree(childrenCount, level) {
   Сформированное дерево верните в качестве результата работы функции.
 */
 export function replaceNodes() {
+    let html = generateTree(2, 3);
+    [].forEach.call(html.querySelectorAll('.item_2'), function (item_2) {
+        var section = document.createElement('section');
+        section.className = 'item_2';
+        section.innerHTML = item_2.innerHTML;
+        item_2.parentNode.replaceChild(section, item_2);
+    });
+    return html;
 }
